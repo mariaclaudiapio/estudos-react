@@ -11,45 +11,67 @@ import { apiGetAllFlashCards } from '../services/apiService';
 
 export default function FlashCardsPage() {
   const [allCards, setAllCards] = useState([]);
+  const [studyCards, setStudyCards] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true);
 
   useEffect(() => {
-    apiGetAllFlashCards().then(allFlashCards => {
-      setAllCards(allFlashCards);
-    });
+    //exemplo de promise:
+    // apiGetAllFlashCards().then(allFlashCards => {
+    //   setAllCards(allFlashCards);
+    // });
+
+    //exemplo de async await:
+    // async function getAllCards() {
+    //   const backEndAllCards = await apiGetAllFlashCards();
+    //   setAllCards(backEndAllCards);
+    // }
+
+    // getAllCards();
+
+    //exemplo de IIFE:
+    (async function getAllCards() {
+      const backEndAllCards = await apiGetAllFlashCards();
+      setAllCards(backEndAllCards);
+      setLoading(false);
+    })();
   }, []);
 
   function handleButtonClick() {
-    const shuffledCards = helperShuffleArray(allCards);
-    setAllCards(shuffledCards);
+    const shuffledCards = helperShuffleArray(studyCards);
+    setStudyCards(shuffledCards);
   }
 
+  useEffect(() => {
+    setStudyCards(allCards.map(card => ({ ...card, showTitle: true })));
+  }, [allCards]);
+
   function handleRadioShowTitleClick() {
-    const updatedCards = [...allCards].map(card => ({
+    const updatedCards = [...studyCards].map(card => ({
       ...card,
       showTitle: true,
     }));
 
-    setAllCards(updatedCards);
+    setStudyCards(updatedCards);
     setRadioButtonShowTitle(true);
   }
 
   function handleRadioShowDescriptionClick() {
-    const updatedCards = [...allCards].map(card => ({
+    const updatedCards = [...studyCards].map(card => ({
       ...card,
       showTitle: false,
     }));
 
-    setAllCards(updatedCards);
+    setStudyCards(updatedCards);
     setRadioButtonShowTitle(false);
   }
 
   function handleToggleFlashCard(cardId) {
-    const updatedCards = [...allCards];
+    const updatedCards = [...studyCards];
     const cardIndex = updatedCards.findIndex(card => card.id === cardId);
     updatedCards[cardIndex].showTitle = !updatedCards[cardIndex].showTitle;
 
-    setAllCards(updatedCards);
+    setStudyCards(updatedCards);
   }
 
   return (
@@ -78,7 +100,7 @@ export default function FlashCardsPage() {
         </RadioButton>
       </div>
       <FlashCards>
-        {allCards.map(({ id, title, description, showTitle }) => (
+        {studyCards.map(({ id, title, description, showTitle }) => (
           <FlashCard
             key={id}
             id={id}
@@ -93,4 +115,4 @@ export default function FlashCardsPage() {
   );
 }
 
-// retomar da aula 5.4
+// retomar da aula 5.5 ()
