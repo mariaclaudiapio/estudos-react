@@ -118,4 +118,4 @@ export default function FlashCardsPage() {
   );
 }
 
-// retomar da aula 5.3
+// retomar da aula 5.2
