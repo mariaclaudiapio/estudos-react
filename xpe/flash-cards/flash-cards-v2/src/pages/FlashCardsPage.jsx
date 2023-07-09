@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import FlashCard from '../components/FlashCard';
 import FlashCards from '../components/FlashCards';
 import Header from '../components/Header';
-import Loading from '../components/Loading';
+
 import Main from '../components/Main';
 import RadioButton from '../components/RadioButton';
 import { helperShuffleArray } from '../helpers/arrayHelpers';
@@ -13,7 +13,7 @@ import { apiGetAllFlashCards } from '../services/apiService';
 export default function FlashCardsPage() {
   const [allCards, setAllCards] = useState([]);
   const [studyCards, setStudyCards] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [radioButtonShowTitle, setRadioButtonShowTitle] = useState(true);
 
   useEffect(() => {
@@ -26,7 +26,6 @@ export default function FlashCardsPage() {
     async function getAllCards() {
       const backEndAllCards = await apiGetAllFlashCards();
       setAllCards(backEndAllCards);
-      setLoading(false);
     }
 
     getAllCards();
@@ -37,8 +36,6 @@ export default function FlashCardsPage() {
   //     const backEndAllCards = await apiGetAllFlashCards();
   //     setAllCards(backEndAllCards);
   //   })();
-
-  // getAllCards();
 
   function handleShuffle() {
     const shuffledCards = helperShuffleArray(studyCards);
